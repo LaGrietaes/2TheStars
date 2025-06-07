@@ -21,18 +21,16 @@ function AppContent() {
       {/* Star particles overlay */}
       <StarParticles />
       
-
-
       {/* Header with Logo - Fixed height, iOS style */}
-      <header className="flex-shrink-0 flex items-center justify-center px-4 pt-8 pb-3 z-20 bg-black/10 backdrop-blur-xl border-b border-white/10">
+      <header className="flex-shrink-0 flex items-center justify-center px-4 pt-safe pb-3 z-20 bg-black/10 backdrop-blur-xl border-b border-white/10 h-16">
         <Logo size="sm" />
       </header>
 
-      {/* Main content - Flexible height */}
-      <main className="flex-1 flex flex-col min-h-0 relative z-10">
+      {/* Main content - Properly calculated height to avoid bottom nav overlap */}
+      <main className="flex-1 flex flex-col min-h-0 relative z-10" style={{height: 'calc(100vh - 16rem)'}}>
         {currentView === "randomizer" ? (
-          <div className="flex-1 flex items-center justify-center px-4">
-            <div className="w-full max-w-sm">
+          <div className="flex-1 flex items-stretch justify-center px-4 py-2">
+            <div className="w-full max-w-sm flex flex-col">
               <RandomPositionSelector 
                 selectedPositions={selectedPositions} 
                 onShowLanguageSelector={() => setShowLanguageSelector(true)}
@@ -50,33 +48,33 @@ function AppContent() {
         )}
       </main>
 
-      {/* Bottom Navigation - Fixed iOS style tab bar */}
-      <nav className="flex-shrink-0 z-20 bg-black/20 backdrop-blur-xl border-t border-white/10">
-        <div className="flex items-center justify-center gap-4 px-6 py-4 pb-8 max-w-md mx-auto">
+      {/* Bottom Navigation - Fixed iOS style tab bar with safe area */}
+      <nav className="flex-shrink-0 z-20 bg-black/20 backdrop-blur-xl border-t border-white/10 pb-safe">
+        <div className="flex items-center justify-center gap-4 px-6 py-3 max-w-md mx-auto">
           <button
             onClick={() => setCurrentView("randomizer")}
-            className={`flex flex-col items-center gap-2 px-8 py-3 rounded-2xl transition-all duration-300 ${
+            className={`flex flex-col items-center gap-1.5 px-6 py-2.5 rounded-xl transition-all duration-300 ${
               currentView === "randomizer"
                 ? "bg-pink-500/90 backdrop-blur-md text-white shadow-lg shadow-pink-500/30 border border-pink-400/30"
                 : "text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-md border border-transparent"
             }`}
           >
-            <Shuffle className="w-6 h-6" />
+            <Shuffle className="w-5 h-5" />
             <span className="text-xs font-medium">{t.randomizer}</span>
           </button>
 
           <button
             onClick={() => setCurrentView("library")}
-            className={`flex flex-col items-center gap-2 px-8 py-3 rounded-2xl transition-all duration-300 relative ${
+            className={`flex flex-col items-center gap-1.5 px-6 py-2.5 rounded-xl transition-all duration-300 relative ${
               currentView === "library"
                 ? "bg-pink-500/90 backdrop-blur-md text-white shadow-lg shadow-pink-500/30 border border-pink-400/30"
                 : "text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-md border border-transparent"
             }`}
           >
-            <Library className="w-6 h-6" />
+            <Library className="w-5 h-5" />
             <span className="text-xs font-medium">{t.library}</span>
             {selectedPositions.length > 0 && (
-              <div className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center border-2 border-white/30 backdrop-blur-sm">
+              <div className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center border-2 border-white/30 backdrop-blur-sm">
                 {selectedPositions.length}
               </div>
             )}

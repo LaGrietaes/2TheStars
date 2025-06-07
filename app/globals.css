@@ -16,6 +16,86 @@
   }
 }
 
+/* Safe area support for mobile devices */
+@supports (padding: max(0px)) {
+  .pt-safe {
+    padding-top: max(env(safe-area-inset-top), 1rem);
+  }
+  
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+  }
+  
+  .pl-safe {
+    padding-left: max(env(safe-area-inset-left), 1rem);
+  }
+  
+  .pr-safe {
+    padding-right: max(env(safe-area-inset-right), 1rem);
+  }
+}
+
+/* Fallback for browsers without safe-area support */
+.pt-safe {
+  padding-top: 1rem;
+}
+
+.pb-safe {
+  padding-bottom: 1rem;
+}
+
+.pl-safe {
+  padding-left: 1rem;
+}
+
+.pr-safe {
+  padding-right: 1rem;
+}
+
+/* Improve touch targets for mobile */
+@media (hover: none) and (pointer: coarse) {
+  button {
+    min-height: 44px;
+  }
+}
+
+/* Prevent zoom on input focus in iOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select, textarea, input[type="text"], input[type="password"], 
+  input[type="datetime"], input[type="datetime-local"], 
+  input[type="date"], input[type="month"], input[type="time"], 
+  input[type="week"], input[type="number"], input[type="email"], 
+  input[type="url"], input[type="search"], input[type="tel"], 
+  input[type="color"] {
+    font-size: 16px;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fix viewport height on mobile */
+.min-h-screen-fix {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Animation delays for sequencing */
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+/* Prevent content shift during loading */
+* {
+  box-sizing: border-box;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -24,7 +104,20 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  /* Prevent pull to refresh on mobile */
+  overscroll-behavior-y: none;
+  /* Prevent text selection on UI elements */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Allow text selection on specific elements */
+p, h1, h2, h3, h4, h5, h6, span.selectable {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
 }
 
 @layer utilities {

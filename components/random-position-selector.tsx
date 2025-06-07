@@ -299,13 +299,13 @@ export default function RandomPositionSelector({ selectedPositions, onShowLangua
         </div>
       </div>
 
-      {/* Primary Actions - Compact */}
-      <div className="flex-shrink-0 space-y-3 pt-4">
+      {/* Primary Actions - Compact and responsive */}
+      <div className="flex-shrink-0 space-y-2 pt-2">
         {/* Main Action */}
         <button
           onClick={selectRandomPosition}
           disabled={isAnimating}
-          className={`w-full h-12 rounded-2xl font-semibold tracking-tight transition-all duration-300 ease-out ${
+          className={`w-full h-10 rounded-xl font-semibold tracking-tight transition-all duration-300 ease-out ${
             isAnimating
               ? "bg-gray-800/50 text-gray-400 cursor-not-allowed backdrop-blur-md"
               : "bg-gradient-to-r from-blue-500/90 to-purple-600/90 hover:from-blue-600/90 hover:to-purple-700/90 text-white shadow-lg hover:shadow-xl active:scale-[0.98] backdrop-blur-md border border-white/10"
@@ -314,50 +314,51 @@ export default function RandomPositionSelector({ selectedPositions, onShowLangua
           {isAnimating ? (
             <div className="flex items-center justify-center">
               <div className="w-4 h-4 border-2 border-gray-500 border-t-gray-300 rounded-full animate-spin mr-2" />
-              Selecting...
+              <span className="text-sm">Selecting...</span>
             </div>
           ) : (
             <div className="flex items-center justify-center">
               <Sparkles className="w-4 h-4 mr-2" />
-              New Position
+              <span className="text-sm">New Position</span>
             </div>
           )}
         </button>
 
-        {/* Auto Mode Toggle */}
-        <button
-          onClick={isAutoMode ? stopAutoMode : startAutoMode}
-          className={`w-full h-10 rounded-xl font-medium tracking-tight transition-all duration-300 ease-out ${
-            isAutoMode
-              ? "bg-red-500/80 hover:bg-red-600/80 text-white shadow-md active:scale-[0.98] backdrop-blur-md border border-red-400/30"
-              : "bg-white/[0.08] hover:bg-white/[0.12] text-white border border-white/20 backdrop-blur-md active:scale-[0.98]"
-          }`}
-        >
-          {isAutoMode ? (
-            <div className="flex items-center justify-center">
-              <Pause className="w-3.5 h-3.5 mr-2" />
-              <span className="text-sm">Stop Auto</span>
-            </div>
-          ) : (
-            <div className="flex items-center justify-center">
-              <Play className="w-3.5 h-3.5 mr-2" />
-              <span className="text-sm">Auto ({autoInterval}min)</span>
-            </div>
-          )}
-        </button>
-      </div>
+        {/* Secondary actions row */}
+        <div className="flex gap-2">
+          {/* Auto Mode Toggle */}
+          <button
+            onClick={isAutoMode ? stopAutoMode : startAutoMode}
+            className={`flex-1 h-9 rounded-lg font-medium tracking-tight transition-all duration-300 ease-out ${
+              isAutoMode
+                ? "bg-red-500/80 hover:bg-red-600/80 text-white shadow-md active:scale-[0.98] backdrop-blur-md border border-red-400/30"
+                : "bg-white/[0.08] hover:bg-white/[0.12] text-white border border-white/20 backdrop-blur-md active:scale-[0.98]"
+            }`}
+          >
+            {isAutoMode ? (
+              <div className="flex items-center justify-center">
+                <Pause className="w-3 h-3 mr-1" />
+                <span className="text-xs">Stop</span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center">
+                <Play className="w-3 h-3 mr-1" />
+                <span className="text-xs">Auto ({autoInterval}m)</span>
+              </div>
+            )}
+          </button>
 
-      {/* More Options - Bottom */}
-      <div className="flex justify-center pt-3 flex-shrink-0">
-        <button
-          onClick={() => setShowMoreMenu(!showMoreMenu)}
-          className="px-4 py-1.5 bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.08] text-white/70 hover:text-white/90 rounded-full transition-all duration-200 ease-out backdrop-blur-md"
-        >
-          <div className="flex items-center">
-            <MoreHorizontal className="w-3.5 h-3.5 mr-1.5" />
-            <span className="text-xs font-medium">Options</span>
-          </div>
-        </button>
+          {/* Options Button */}
+          <button
+            onClick={() => setShowMoreMenu(!showMoreMenu)}
+            className="px-3 h-9 bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.08] text-white/70 hover:text-white/90 rounded-lg transition-all duration-200 ease-out backdrop-blur-md"
+          >
+            <div className="flex items-center">
+              <MoreHorizontal className="w-3 h-3 mr-1" />
+              <span className="text-xs font-medium">Options</span>
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Options Modal - Clean and Working */}
