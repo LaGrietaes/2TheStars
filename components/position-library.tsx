@@ -8,13 +8,11 @@ import { positions, categories, getPositionsByCategory, type Position } from "@/
 interface PositionLibraryProps {
   selectedPositions: number[]
   onSelectionChange: (positions: number[]) => void
-  onBackToRandomizer: () => void
 }
 
 export default function PositionLibrary({
   selectedPositions,
   onSelectionChange,
-  onBackToRandomizer,
 }: PositionLibraryProps) {
   const { t } = useLanguage()
   const [selectedCategory, setSelectedCategory] = useState("all")
@@ -104,313 +102,257 @@ export default function PositionLibrary({
     onSelectionChange(newSelection)
   }
 
-  const getCategorySelectedCount = () => {
-    const categoryPositions = displayedPositions.map(p => p.id)
-    return selectedPositions.filter(id => categoryPositions.includes(id)).length
-  }
-
-  const scrollToIndex = (index: number) => {
-    if (index >= 0 && index < displayedPositions.length) {
-      setCurrentIndex(index)
+  const scrollLeft = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1)
     }
   }
 
-  const scrollLeft = () => scrollToIndex(currentIndex - 1)
-  const scrollRight = () => scrollToIndex(currentIndex + 1)
-
-  // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault()
-        scrollLeft()
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault()
-        scrollRight()
-      } else if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        if (displayedPositions[currentIndex]) {
-          togglePosition(displayedPositions[currentIndex].id)
-        }
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [currentIndex, displayedPositions])
-
-  const getCardTransform = (index: number) => {
-    const offset = index - currentIndex
-    const absOffset = Math.abs(offset)
-    
-    if (absOffset === 0) {
-      // Center card - larger and prominent
-      return {
-        transform: 'translateX(0) rotateY(0deg) scale(1)',
-        zIndex: 100,
-        opacity: 1
-      }
-    } else if (absOffset === 1) {
-      // Adjacent cards
-      const side = offset > 0 ? 1 : -1
-      return {
-        transform: `translateX(${side * 200}px) rotateY(${-side * 60}deg) scale(0.75)`,
-        zIndex: 90,
-        opacity: 0.7
-      }
-    } else if (absOffset === 2) {
-      // Second adjacent cards
-      const side = offset > 0 ? 1 : -1
-      return {
-        transform: `translateX(${side * 350}px) rotateY(${-side * 75}deg) scale(0.5)`,
-        zIndex: 80,
-        opacity: 0.4
-      }
-    } else {
-      // Hidden cards
-      const side = offset > 0 ? 1 : -1
-      return {
-        transform: `translateX(${side * 500}px) rotateY(${-side * 85}deg) scale(0.3)`,
-        zIndex: 70,
-        opacity: 0.2
-      }
+  const scrollRight = () => {
+    if (currentIndex < displayedPositions.length - 1) {
+      setCurrentIndex(currentIndex + 1)
     }
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* Header */}
+    <div className="w-full h-full flex flex-col overflow-hidden">
+      {/* Clean Header */}
       <div className="flex-shrink-0 flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={onBackToRandomizer}
-            className="p-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white hover:bg-white/20 transition-all duration-300 shadow-lg"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-            <h2 className="text-2xl font-bold text-white">{t.positionLibrary}</h2>
-            <p className="text-white/70 text-sm">
-              {selectedPositions.length} / {positions.length} {t.selected}
-            </p>
-          </div>
+        <div>
+          <h2 className="text-2xl font-bold text-white">{t.positionLibrary}</h2>
+          <p className="text-white/60 text-sm mt-1">
+            {selectedPositions.length} / {positions.length} {t.selected}
+          </p>
         </div>
 
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="p-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white hover:bg-white/20 transition-all duration-300 shadow-lg"
+          className={`button-secondary p-3 rounded-xl transition-all duration-200 ${
+            showFilters ? 'bg-brand-primary/20 border-brand-primary/30' : ''
+          }`}
         >
           <Filter className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Category Filters */}
+      {/* iTunes-Style Filter Menu */}
       {showFilters && (
-        <div className="flex-shrink-0 mb-6 bg-white/[0.05] backdrop-blur-xl rounded-xl border border-white/10 p-4">
-          <h3 className="text-white font-semibold mb-3">Categories</h3>
-          <div className="flex flex-wrap gap-2">
+        <div className="flex-shrink-0 bg-black/20 backdrop-blur-2xl rounded-3xl border border-white/10 p-6 mb-6 shadow-2xl">
+          <div className="grid grid-cols-2 gap-3">
             {categories.map((category) => (
               <button
                 key={category.key}
                 onClick={() => setSelectedCategory(category.key)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category.key
-                    ? "bg-pink-500/90 text-white backdrop-blur-md border border-pink-400/30"
-                    : "bg-white/10 text-white/70 hover:bg-white/20 backdrop-blur-md border border-white/20"
+                    ? "bg-gradient-to-r from-brand-primary to-brand-secondary text-white shadow-lg shadow-brand-primary/30"
+                    : "bg-white/10 text-white/80 hover:bg-white/20 hover:scale-105"
                 }`}
               >
                 {category.name}
-                {category.key !== "all" && (
-                  <span className="ml-1 text-xs opacity-70">
-                    ({getPositionsByCategory(category.key).length})
-                  </span>
-                )}
               </button>
             ))}
           </div>
         </div>
       )}
 
-      {/* Category Controls */}
-      <div className="flex-shrink-0 flex items-center justify-between mb-6">
-        <div className="text-white">
-          <span className="font-semibold">
+      {/* Quick Actions */}
+      {!showFilters && (
+        <div className="flex-shrink-0 flex items-center justify-between mb-4">
+          <div className="text-white/60 text-sm">
             {categories.find(c => c.key === selectedCategory)?.name}
-          </span>
-        </div>
+          </div>
 
-        <div className="flex gap-2">
-          <button
-            onClick={selectAll}
-            className="px-4 py-2 bg-white/10 text-white rounded-lg border border-white/20 hover:bg-white/20 transition-all duration-300 text-sm backdrop-blur-md"
-          >
-            {t.all}
-          </button>
-          <button
-            onClick={selectNone}
-            className="px-4 py-2 bg-white/10 text-white rounded-lg border border-white/20 hover:bg-white/20 transition-all duration-300 text-sm backdrop-blur-md"
-          >
-            {t.none}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={selectAll}
+              className="button-secondary px-4 py-2 text-sm rounded-full"
+            >
+              {t.all}
+            </button>
+            <button
+              onClick={selectNone}
+              className="button-secondary px-4 py-2 text-sm rounded-full"
+            >
+              {t.none}
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Cover Flow Style Position Viewer */}
-      <div className="flex-1 flex flex-col items-center justify-center relative overflow-hidden">
+      {/* iTunes Cover Flow Display */}
+      <div className="flex-1 flex flex-col min-h-0">
         {displayedPositions.length > 0 ? (
           <>
-            {/* Navigation Arrows */}
-            <button
-              onClick={scrollLeft}
-              disabled={currentIndex === 0}
-              className="absolute left-8 top-1/2 -translate-y-1/2 z-50 p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white hover:bg-white/20 transition-all duration-300 shadow-lg disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              <ChevronLeft className="w-8 h-8" />
-            </button>
-
-            <button
-              onClick={scrollRight}
-              disabled={currentIndex === displayedPositions.length - 1}
-              className="absolute right-8 top-1/2 -translate-y-1/2 z-50 p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white hover:bg-white/20 transition-all duration-300 shadow-lg disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              <ChevronRight className="w-8 h-8" />
-            </button>
-
-            {/* Cover Flow Container */}
-            <div 
-              className="relative w-full flex items-center justify-center"
-              style={{ 
-                perspective: '2000px',
-                height: '500px'
-              }}
-            >
-              {displayedPositions.map((position, index) => {
-                const isSelected = selectedPositions.includes(position.id)
-                const svgContent = svgContents[position.id]
-                const cardStyle = getCardTransform(index)
-                const isCurrent = index === currentIndex
-
-                return (
-                  <div
-                    key={position.id}
-                    className="absolute cursor-pointer transition-all duration-700 ease-out"
-                    style={{
-                      ...cardStyle,
-                      transformStyle: 'preserve-3d'
-                    }}
-                    onClick={() => {
-                      if (isCurrent) {
-                        togglePosition(position.id)
-                      } else {
-                        setCurrentIndex(index)
-                      }
-                    }}
+            {/* Cover Flow Container - Full Space Usage */}
+            <div className="flex-1 flex items-center justify-center relative px-2 sm:px-4 min-h-0">
+              {/* Navigation Arrows - Positioned at card level */}
+              {displayedPositions.length > 1 && (
+                <>
+                  <button
+                    onClick={scrollLeft}
+                    disabled={currentIndex === 0}
+                    className="absolute left-2 sm:left-4 z-20 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/50 backdrop-blur-xl border border-white/30 flex items-center justify-center text-white hover:bg-black/70 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
                   >
-                    {/* Main Card */}
-                    <div className={`relative group ${isCurrent ? 'w-80 h-96' : 'w-64 h-80'} transition-all duration-700`}>
-                      <div className="w-full h-full bg-white/[0.08] backdrop-blur-xl rounded-2xl border border-white/20 overflow-hidden shadow-2xl">
-                        {/* SVG Display */}
-                        <div className="w-full h-5/6 p-0 flex items-center justify-center">
-                          {svgContent ? (
-                            <div
-                              className="w-full h-full transition-transform duration-300 group-hover:scale-105"
-                              dangerouslySetInnerHTML={{ __html: svgContent }}
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-white/10 rounded-lg animate-pulse" />
-                          )}
-                        </div>
+                    <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7" />
+                  </button>
 
-                        {/* Position Info */}
-                        <div className="h-1/6 p-2 bg-black/50 backdrop-blur-sm border-t border-white/20">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1">
-                              {Array.from({ length: 5 }, (_, i) => (
-                                <div
-                                  key={i}
-                                  className={`w-2 h-2 rounded-full ${
-                                    i < ((position.id % 5) + 1)
-                                      ? "bg-pink-400"
-                                      : "bg-white/20"
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                            <span className="text-white/50 text-xs font-medium">
-                              {((position.id % 5) + 1)}/5
-                            </span>
-                          </div>
-                          {position.category && (
-                            <p className="text-white/60 text-xs capitalize truncate mt-1">{position.category}</p>
-                          )}
-                        </div>
+                  <button
+                    onClick={scrollRight}
+                    disabled={currentIndex === displayedPositions.length - 1}
+                    className="absolute right-2 sm:right-4 z-20 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/50 backdrop-blur-xl border border-white/30 flex items-center justify-center text-white hover:bg-black/70 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7" />
+                  </button>
+                </>
+              )}
 
-                        {/* Selection Indicator */}
-                        {isSelected && (
-                          <div className="absolute top-4 right-4 bg-pink-500 rounded-full p-2 shadow-lg">
-                            <Check className="w-5 h-5 text-white" />
-                          </div>
-                        )}
+              {/* Cover Flow Cards - Full Width */}
+              <div className="w-full flex items-center justify-center relative">
+                <div className="relative w-full h-96 sm:h-[28rem] lg:h-[32rem] flex items-center justify-center" style={{ perspective: '1500px' }}>
+                  {displayedPositions.map((position, index) => {
+                    const offset = index - currentIndex
+                    const isActive = index === currentIndex
+                    const isAdjacent = Math.abs(offset) === 1
+                    const isVisible = Math.abs(offset) <= 2
 
-                        {/* Glow effect for selected items */}
-                        {isSelected && (
-                          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 pointer-events-none" />
-                        )}
-                      </div>
+                    if (!isVisible) return null
 
-                      {/* Reflection Effect */}
-                      <div 
-                        className="absolute top-full left-0 w-full h-2/3 overflow-hidden rounded-2xl opacity-30"
+                    let transform = 'translateX(-50%) translateY(-50%) translateZ(0px) rotateY(0deg) scale(1)'
+                    let zIndex = 10
+                    let opacity = 1
+
+                    if (!isActive) {
+                      if (offset < 0) {
+                        // Left cards - closer to center
+                        transform = `translateX(-50%) translateY(-50%) translateX(-${Math.abs(offset) * 70}%) translateZ(-${Math.abs(offset) * 180}px) rotateY(35deg) scale(${0.75 - Math.abs(offset) * 0.1})`
+                      } else {
+                        // Right cards - closer to center
+                        transform = `translateX(-50%) translateY(-50%) translateX(${Math.abs(offset) * 70}%) translateZ(-${Math.abs(offset) * 180}px) rotateY(-35deg) scale(${0.75 - Math.abs(offset) * 0.1})`
+                      }
+                      zIndex = 10 - Math.abs(offset)
+                      opacity = isAdjacent ? 0.8 : 0.5
+                    } else {
+                      transform = 'translateX(-50%) translateY(-50%) translateZ(0px) rotateY(0deg) scale(1)'
+                    }
+
+                    return (
+                      <div
+                        key={position.id}
+                        className={`absolute left-1/2 top-1/2 cursor-pointer transition-all duration-500 ease-out ${
+                          !isActive ? 'hover:scale-105' : ''
+                        }`}
                         style={{
-                          transform: 'rotateX(180deg)',
-                          transformOrigin: 'top',
-                          background: 'linear-gradient(to bottom, transparent 0%, black 100%)',
-                          maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 80%)',
-                          WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 80%)'
+                          transform,
+                          zIndex,
+                          opacity,
+                          transformStyle: 'preserve-3d'
+                        }}
+                        onClick={() => {
+                          if (isActive) {
+                            togglePosition(position.id)
+                          } else {
+                            setCurrentIndex(index)
+                          }
                         }}
                       >
-                        <div className="w-full h-full bg-white/[0.04] backdrop-blur-xl border border-white/10">
-                          {svgContent && (
-                            <div className="w-full h-3/4 p-6 flex items-center justify-center">
-                              <div
-                                className="w-full h-full"
-                                dangerouslySetInnerHTML={{ __html: svgContent }}
-                              />
+                        <div className={`${isActive ? 'w-72 sm:w-80 lg:w-96' : 'w-48 sm:w-56 lg:w-64'}`}>
+                          <div 
+                            className="aspect-[3/4] bg-white/[0.08] backdrop-blur-xl rounded-3xl border border-white/20 overflow-hidden shadow-2xl group relative"
+                          >
+                            {/* Large SVG Display */}
+                            <div className="w-full h-full p-2 sm:p-3 flex items-center justify-center relative">
+                              {svgContents[position.id] ? (
+                                <div
+                                  className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+                                  dangerouslySetInnerHTML={{ __html: svgContents[position.id] }}
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-white/10 rounded-2xl animate-pulse flex items-center justify-center">
+                                  <div className="text-white/40 text-sm">Loading...</div>
+                                </div>
+                              )}
+
+                              {/* Title Inside Artwork - Bottom Overlay */}
+                              {isActive && (
+                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 sm:p-6">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex items-center gap-1">
+                                        {Array.from({ length: 5 }, (_, i) => (
+                                          <div
+                                            key={i}
+                                            className={`w-2 h-2 rounded-full ${
+                                              i < ((position.id % 5) + 1)
+                                                ? "bg-brand-primary"
+                                                : "bg-white/30"
+                                            }`}
+                                          />
+                                        ))}
+                                      </div>
+                                      <span className="text-white/70 text-xs sm:text-sm capitalize">
+                                        {(() => {
+                                          const difficulty = ((position.id % 5) + 1)
+                                          const levels = ['Easy', 'Medium', 'Hard', 'Expert', 'Pornstar']
+                                          return levels[difficulty - 1]
+                                        })()}
+                                      </span>
+                                    </div>
+                                    <span className="text-white/60 text-sm">
+                                      {currentIndex + 1}/{displayedPositions.length}
+                                    </span>
+                                  </div>
+                                  <h3 className="text-white text-lg sm:text-xl font-bold leading-tight">
+                                    {position.name}
+                                  </h3>
+                                  {position.category && (
+                                    <p className="text-brand-primary text-sm sm:text-base capitalize font-medium mt-1">
+                                      {position.category}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
                             </div>
-                          )}
+
+                            {/* Selection Check */}
+                            {selectedPositions.includes(position.id) && (
+                              <div className="absolute top-4 right-4 sm:top-6 sm:right-6 bg-brand-primary rounded-full p-2 sm:p-3 shadow-lg shadow-brand-primary/50">
+                                <Check className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                              </div>
+                            )}
+
+                            {/* Selection Glow */}
+                            {selectedPositions.includes(position.id) && (
+                              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-primary/25 to-brand-secondary/25 pointer-events-none" />
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                )
-              })}
+                    )
+                  })}
+                </div>
+              </div>
             </div>
 
-            {/* Current Position Info */}
-            {displayedPositions[currentIndex] && (
-              <div className="mt-8 text-center">
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  {displayedPositions[currentIndex].name}
-                </h3>
-                <p className="text-white/70 text-lg mb-4">
-                  {currentIndex + 1} of {displayedPositions.length}
-                </p>
+            {/* Bottom Action */}
+            <div className="px-4 sm:px-6 text-center flex-shrink-0 py-4">
+              {displayedPositions[currentIndex] && (
                 <button
                   onClick={() => togglePosition(displayedPositions[currentIndex].id)}
-                  className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${
+                  className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
                     selectedPositions.includes(displayedPositions[currentIndex].id)
-                      ? "bg-pink-500 text-white shadow-lg shadow-pink-500/30"
-                      : "bg-white/20 text-white border border-white/30 hover:bg-white/30"
+                      ? "button-primary shadow-lg shadow-brand-primary/30"
+                      : "button-secondary hover:bg-white/20"
                   }`}
                 >
                   {selectedPositions.includes(displayedPositions[currentIndex].id) ? "Selected ✓" : "Select"}
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-white/70 text-xl">No positions found in this category.</p>
+          <div className="flex-1 flex items-center justify-center">
+            <p className="text-white/70 text-sm sm:text-base">No positions found in this category.</p>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { X, Copy, Share2, Download, MessageCircle, Mail } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { Position } from "@/lib/positions"
+import { Logo } from "@/components/ui/logo"
 
 interface ShareModalProps {
   position: Position
@@ -149,92 +150,104 @@ ${t.tryAppYourself}: ${appUrl}
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="w-full max-w-md bg-black/90 backdrop-blur-lg rounded-2xl border border-pink-500/30 overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-pink-500/30">
-          <h3 className="text-lg font-bold text-white">{t.sharePosition}</h3>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/70 hover:text-white"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Position Preview */}
-        <div className="p-4 border-b border-pink-500/30">
-          <div className="bg-indigo-950/50 rounded-xl p-4 mb-4">
+    <div className="fixed inset-0 z-50 modal-backdrop animate-fadeIn">
+      <div className="h-full flex flex-col justify-end sm:justify-center sm:items-center p-4">
+        <div className="w-full max-w-md bg-glass border border-white/20 rounded-3xl overflow-hidden animate-slide-up card-elevated">
+          
+          {/* Header - Compact & Branded */}
+          <div className="flex items-center justify-between p-6 pb-4 border-b border-white/10">
             <div className="flex items-center gap-3">
-              <div className="w-16 h-16 bg-black/30 rounded-lg flex items-center justify-center">
-                {svgContent ? (
-                  <div className="w-12 h-12" dangerouslySetInnerHTML={{ __html: svgContent }} />
-                ) : (
-                  <div className="w-12 h-12 bg-indigo-900/30 rounded-full"></div>
-                )}
+              <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center">
+                <Share2 className="w-4 h-4 text-white" />
               </div>
-              <div className="flex-1">
-                <h4 className="font-bold text-white text-sm">{position.name}</h4>
-                <p className="text-white/70 text-xs line-clamp-2">{description}</p>
+              <h3 className="text-headline text-white">{t.sharePosition}</h3>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/10 rounded-xl transition-colors text-white/70 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Position Preview - Improved Layout */}
+          <div className="p-6 pb-4">
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-brand-primary/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  {svgContent ? (
+                    <div className="w-12 h-12" dangerouslySetInnerHTML={{ __html: svgContent }} />
+                  ) : (
+                    <div className="w-12 h-12 bg-brand-primary/30 rounded-xl"></div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-body text-white font-medium mb-1">{position.name}</h4>
+                  <p className="text-micro text-white/70 line-clamp-2">{description}</p>
+                </div>
               </div>
+            </div>
+
+            <div className="text-center mt-3">
+              <p className="text-micro text-white/60">{t.shareWithPartner}</p>
             </div>
           </div>
 
-          <div className="text-center text-white/70 text-xs">
-            <p>{t.shareWithPartner}</p>
+          {/* Share Options - Improved Grid */}
+          <div className="px-6 pb-4">
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <button
+                onClick={handleNativeShare}
+                className="button-primary flex items-center gap-2 p-3 rounded-xl justify-center"
+              >
+                <Share2 className="w-4 h-4" />
+                <span className="text-caption font-medium">{t.share}</span>
+              </button>
+
+              <button
+                onClick={handleCopyText}
+                className="button-secondary flex items-center gap-2 p-3 rounded-xl justify-center"
+              >
+                <Copy className="w-4 h-4" />
+                <span className="text-caption font-medium">{copied ? t.copied : t.copyText}</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <button
+                onClick={handleWhatsAppShare}
+                className="flex items-center gap-2 p-3 bg-green-600 hover:bg-green-700 rounded-xl text-white transition-colors justify-center"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span className="text-caption font-medium">{t.whatsapp}</span>
+              </button>
+
+              <button
+                onClick={handleEmailShare}
+                className="flex items-center gap-2 p-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white transition-colors justify-center"
+              >
+                <Mail className="w-4 h-4" />
+                <span className="text-caption font-medium">{t.email}</span>
+              </button>
+            </div>
+
+            <button
+              onClick={handleDownloadImage}
+              className="w-full button-secondary flex items-center justify-center gap-2 p-3 rounded-xl"
+            >
+              <Download className="w-4 h-4" />
+              <span className="text-caption font-medium">{t.downloadImage}</span>
+            </button>
           </div>
-        </div>
 
-        {/* Share Options */}
-        <div className="p-4">
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <button
-              onClick={handleNativeShare}
-              className="flex flex-col items-center gap-2 p-3 bg-pink-500 rounded-xl text-white hover:bg-pink-600 transition-colors"
-            >
-              <Share2 className="w-5 h-5" />
-              <span className="text-xs font-medium">{t.share}</span>
-            </button>
-
-            <button
-              onClick={handleCopyText}
-              className="flex flex-col items-center gap-2 p-3 bg-black/50 border border-pink-500/30 rounded-xl text-white hover:bg-black/70 transition-colors"
-            >
-              <Copy className="w-5 h-5" />
-              <span className="text-xs font-medium">{copied ? t.copied : t.copyText}</span>
-            </button>
-
-            <button
-              onClick={handleWhatsAppShare}
-              className="flex flex-col items-center gap-2 p-3 bg-green-600 rounded-xl text-white hover:bg-green-700 transition-colors"
-            >
-              <MessageCircle className="w-5 h-5" />
-              <span className="text-xs font-medium">{t.whatsapp}</span>
-            </button>
-
-            <button
-              onClick={handleEmailShare}
-              className="flex flex-col items-center gap-2 p-3 bg-blue-600 rounded-xl text-white hover:bg-blue-700 transition-colors"
-            >
-              <Mail className="w-5 h-5" />
-              <span className="text-xs font-medium">{t.email}</span>
-            </button>
-          </div>
-
-          <button
-            onClick={handleDownloadImage}
-            className="w-full flex items-center justify-center gap-2 p-3 bg-black/50 border border-pink-500/30 rounded-xl text-white hover:bg-black/70 transition-colors"
-          >
-            <Download className="w-4 h-4" />
-            <span className="text-sm font-medium">{t.downloadImage}</span>
-          </button>
-        </div>
-
-        {/* App Promotion */}
-        <div className="p-4 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-t border-pink-500/30">
-          <div className="text-center">
-            <p className="text-white/90 text-sm font-medium mb-1">{t.appName}</p>
-            <p className="text-white/70 text-xs">{t.discoverNewWays}</p>
+          {/* App Promotion - Centered Logo & Better Branding */}
+          <div className="bg-gradient-to-r from-brand-primary/10 to-brand-secondary/10 border-t border-brand-primary/20 px-6 py-4">
+            <div className="text-center space-y-2">
+              <div className="flex justify-center">
+                <Logo size="sm" />
+              </div>
+              <p className="text-micro text-white/70">{t.discoverNewWays}</p>
+            </div>
           </div>
         </div>
       </div>
