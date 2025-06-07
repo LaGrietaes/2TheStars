@@ -9,11 +9,11 @@ export const metadata: Metadata = {
   keywords: ['relationship', 'intimacy', 'position', 'selector', 'couples', 'romance'],
   authors: [{ name: '2TheStars Team' }],
   creator: '2TheStars',
-  metadataBase: new URL('https://your-domain.com'), // Replace with your actual domain
+  metadataBase: new URL('https://cozy-seahorse-bea8fc.netlify.app'), // Replace with your actual domain
   openGraph: {
     title: '2TheStars',
     description: 'Enhance your relationship with interactive position selector',
-    url: 'https://your-domain.com', // Replace with your actual domain
+    url: 'https://cozy-seahorse-bea8fc.netlify.app', // Replace with your actual domain
     siteName: '2TheStars',
     images: [
       {
