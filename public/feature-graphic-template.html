@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2TheStars Feature Graphic</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+        
+        .feature-graphic {
+            width: 1024px;
+            height: 500px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #7c3aed 50%, #ec4899 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: white;
+            text-align: center;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, white 50%, transparent 50%),
+                radial-gradient(2px 2px at 40px 70px, white 50%, transparent 50%),
+                radial-gradient(1px 1px at 90px 40px, white 50%, transparent 50%),
+                radial-gradient(1px 1px at 130px 80px, white 50%, transparent 50%),
+                radial-gradient(2px 2px at 160px 30px, white 50%, transparent 50%);
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.3;
+        }
+        
+        .content {
+            z-index: 10;
+            max-width: 600px;
+        }
+        
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 24px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #7c3aed;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .title {
+            font-size: 64px;
+            font-weight: 900;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #ffffff, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+        
+        .features {
+            font-size: 20px;
+            margin: 20px 0;
+            opacity: 0.8;
+        }
+        
+        .rating {
+            font-size: 16px;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        
+        .sparkles {
+            position: absolute;
+            font-size: 24px;
+            animation: sparkle 2s infinite;
+        }
+        
+        .sparkle-1 { top: 10%; left: 15%; animation-delay: 0s; }
+        .sparkle-2 { top: 20%; right: 10%; animation-delay: 0.5s; }
+        .sparkle-3 { bottom: 15%; left: 10%; animation-delay: 1s; }
+        .sparkle-4 { bottom: 25%; right: 15%; animation-delay: 1.5s; }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .side-icon {
+            position: absolute;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="feature-graphic">
+        <div class="stars"></div>
+        
+        <div class="sparkles sparkle-1">✨</div>
+        <div class="sparkles sparkle-2">⭐</div>
+        <div class="sparkles sparkle-3">✨</div>
+        <div class="sparkles sparkle-4">⭐</div>
+        
+        <div class="side-icon">2⭐</div>
+        
+        <div class="content">
+            <h1 class="title">2TheStars</h1>
+            <p class="subtitle">Relationship Enhancer</p>
+            <p class="features">60 Intimate Positions • Interactive Timer • Beautiful Design</p>
+            <div class="rating">Mature 17+ Content</div>
+        </div>
+    </div>
+    
+    <script>
+        // Instructions for creating the feature graphic
+        console.log('🎨 Feature Graphic Instructions:');
+        console.log('1. Open this HTML file in Chrome/Edge');
+        console.log('2. Press F12 to open DevTools');
+        console.log('3. Click the device toolbar icon (phone/tablet icon)');
+        console.log('4. Set custom dimensions: 1024 x 500');
+        console.log('5. Take a screenshot or use DevTools screenshot feature');
+        console.log('6. Save as feature-graphic.png');
+        console.log('7. Use this image for Google Play Store feature graphic');
+    </script>
+</body>
+</html> 

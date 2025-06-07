@@ -1,0 +1,7 @@
+
+// New positions from "The Art Of Sexual Ecstasy" collection
+// Add these to your lib/positions.ts file:
+
+
+
+// Don't forget to also add categories for these new positions!

@@ -1,0 +1,19 @@
+
+// Add these new positions to your lib/positions.ts file:
+// Generated from "The Art Of Sexual Ecstasy" collection
+
+  { id: 100, key: "tantrictripurayantra", name: "Tantric Tripura Yantra", svgPath: "/positions/tantric-tripura-yantra.svg", category: "ecstasy" },
+  { id: 101, key: "tantricyantra", name: "Tantric Yantra", svgPath: "/positions/tantric-yantra.svg", category: "ecstasy" },
+  { id: 102, key: "supermansexpositions", name: "Superman Sex Positions", svgPath: "/positions/superman-sex-positions.svg", category: "ecstasy" },
+  { id: 103, key: "sexinabasket", name: "Sex In A Basket", svgPath: "/positions/sex-in-a-basket.svg", category: "ecstasy" },
+  { id: 104, key: "sexyworkoutsexpose", name: "Sexy Workout Sex Pose", svgPath: "/positions/sexy-workout-sex-pose.svg", category: "ecstasy" },
+  { id: 105, key: "ecstasysexposition", name: "Ecstasy Sex Position", svgPath: "/positions/ecstasy-sex-position.svg", category: "ecstasy" },
+  { id: 106, key: "londonbridgesexposition", name: "London Bridge Sex Position", svgPath: "/positions/london-bridge-sex-position.svg", category: "ecstasy" },
+  { id: 107, key: "narcissusposition", name: "Narcissus Position", svgPath: "/positions/narcissus-position.svg", category: "ecstasy" },
+  { id: 108, key: "prisonguardsex", name: "Prison Guard Sex", svgPath: "/positions/prison-guard-sex.svg", category: "ecstasy" },
+  { id: 109, key: "caramelsexposition", name: "Caramel Sex Position", svgPath: "/positions/caramel-sex-position.svg", category: "ecstasy" },
+
+// Don't forget to:
+// 1. Add "ecstasy" to your position categories if not already added
+// 2. Update position names to be more user-friendly
+// 3. Test that all SVGs load correctly in your app
